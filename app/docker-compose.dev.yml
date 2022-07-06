@@ -22,11 +22,11 @@ services:
     build: ./backend
     ports:
       - 3001:3001
-    #working_dir: /app/backend
-    command: npm run dev
-    volumes: 
-      - ./backend:/app/backend
     platform: linux/x86_64
+    #working_dir: /app/backend
+    # command: npm run dev
+    # volumes: 
+    #   - ./backend:/app/backend
     depends_on:
       db:
         condition: service_healthy
@@ -51,7 +51,7 @@ services:
     ports:
       - 3002:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_ROOT_PASSWORD=123456
     restart: 'always'
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"] # Deve aguardar o banco ficar operacional
