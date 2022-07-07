@@ -7,9 +7,9 @@ export default interface IUser {
 }
 
 export interface IUserService {
-  login(): Promise<IUser[]>;
+  login(payload: IUser): Promise<IUser[]>;
 }
 
 export interface IUserModel {
-  login(): Promise<IUser[]>;
+  login(payload: IUser): Promise<IUser[]>;
 }
