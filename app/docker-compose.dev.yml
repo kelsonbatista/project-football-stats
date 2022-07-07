@@ -5,8 +5,8 @@ services:
     build: ./frontend
     ports:
       - 3000:3000
-    platform: linux/x86_64
-    #working_dir: /app/frontend
+    #platform: linux/x86_64
+    working_dir: /app-frontend
     depends_on:
       backend:
         condition: service_healthy
@@ -22,11 +22,11 @@ services:
     build: ./backend
     ports:
       - 3001:3001
-    platform: linux/x86_64
-    #working_dir: /app/backend
+    #platform: linux/x86_64
+    working_dir: /app-backend
     # command: npm run dev
-    # volumes: 
-    #   - ./backend:/app/backend
+    volumes: 
+      - ./backend/src:/app-backend/src
     depends_on:
       db:
         condition: service_healthy
@@ -47,7 +47,7 @@ services:
   db:
     image: mysql:8.0.21
     container_name: db
-    platform: linux/x86_64
+    #platform: linux/x86_64
     ports:
       - 3002:3306
     environment:
