@@ -8,9 +8,9 @@ export default class UserController {
     this.service = service;
   }
 
-  public login = async (_req: Request, res: Response, next: NextFunction) => {
+  public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users = await this.service.login();
+      const users = await this.service.login(req.body);
       return res.status(StatusCodes.OK).json(users);
     } catch (err) {
       next(err);
