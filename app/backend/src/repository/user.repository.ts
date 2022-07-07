@@ -1,13 +1,13 @@
 import IUser, { IUserModel } from '../protocols/user.interface';
-import UserModel from '../database/models';
+import UserModel from '../database/models/user.model';
 
 export default class UserRepository implements IUserModel {
-  constructor(private model: UserModel) {
+  constructor(private model = UserModel) {
     this.model = model;
   }
 
-  public async login(): Promise<IUser[]> {
-    const users = await this.model.findAll();
+  public login = async (): Promise<IUser[]> => {
+    const users = await UserModel.findAll();
     return users;
-  }
+  };
 }
