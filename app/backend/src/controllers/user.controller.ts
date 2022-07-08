@@ -10,8 +10,13 @@ export default class UserController {
 
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users = await this.service.login(req.body);
-      return res.status(StatusCodes.OK).json(users);
+      const user = await this.service.login(req.body);
+      if (!user) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+          message: 'Invalid user or password',
+        });
+      }
+      return res.status(StatusCodes.OK).json(user);
     } catch (err) {
       next(err);
     }
