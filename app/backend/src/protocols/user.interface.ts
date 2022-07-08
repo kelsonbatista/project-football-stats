@@ -8,8 +8,20 @@ export default interface IUser {
 
 export interface IUserService {
   login(payload: IUser): Promise<IUser>;
+  getAllUsers(): Promise<IUser[]>;
+  getUserById(id: string): Promise<IUser>;
+  checkUser(user: IUser): Promise<IUser>;
+  createUser(user: IUser): Promise<IUser>;
+  editUser(id: string, user: IUser): Promise<IUser>;
+  deleteUser(id: string): Promise<void>;
 }
 
 export interface IUserModel {
   login(payload: IUser): Promise<IUser>;
+  getAllUsers(): Promise<IUser[]>;
+  getUserById(id: string): Promise<IUser>;
+  checkUser(user: IUser): Promise<IUser>;
+  createUser(user: IUser): Promise<IUser>;
+  editUser(id: string, user: IUser): Promise<IUser>;
+  deleteUser(id: string): Promise<void>;
 }
