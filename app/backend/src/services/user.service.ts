@@ -5,8 +5,8 @@ export default class UserService implements IUserService {
     this.model = model;
   }
 
-  public async login(payload: IUser): Promise<IUser[]> {
-    const users = await this.model.login(payload);
-    return users;
+  public async login(payload: IUser): Promise<IUser> {
+    const user = await this.model.login(payload);
+    return user;
   }
 }
