@@ -7,7 +7,7 @@ export default interface IUser {
 }
 
 export interface IUserService {
-  login(payload: IUser): Promise<IUser>;
+  login(payload: IUser): Promise<IUser | undefined>;
   getAllUsers(): Promise<IUser[]>;
   getUserById(id: string): Promise<IUser>;
   checkUser(user: IUser): Promise<IUser>;
@@ -17,7 +17,7 @@ export interface IUserService {
 }
 
 export interface IUserModel {
-  login(payload: IUser): Promise<IUser>;
+  login(email: string): Promise<IUser | undefined>;
   getAllUsers(): Promise<IUser[]>;
   getUserById(id: string): Promise<IUser>;
   checkUser(user: IUser): Promise<IUser>;
