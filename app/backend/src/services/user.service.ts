@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcryptjs';
+import 'dotenv/config';
 import IUser, { IUserModel, IUserService } from '../protocols/user.interface';
 
 export default class UserService implements IUserService {
@@ -5,8 +7,20 @@ export default class UserService implements IUserService {
     this.model = model;
   }
 
-  public async login(payload: IUser): Promise<IUser> {
-    const user = await this.model.login(payload);
+  public async login(payload: IUser): Promise<IUser | undefined> {
+    const { email, password } = payload;
+    const user = await this.model.login(email);
+    if (!user) {
+      const error = new Error('Incorrect email or password');
+      error.name = 'UNAUTHORIZED';
+      throw error;
+    }
+    const compare = bcrypt.compareSync(password, user.password);
+    if (!compare) {
+      const error = new Error('Incorrect email or password');
+      error.name = 'UNAUTHORIZED';
+      throw error;
+    }
     return user;
   }
 
@@ -26,7 +40,10 @@ export default class UserService implements IUserService {
   }
 
   public async createUser(user: IUser): Promise<IUser> {
-    const result = await this.model.createUser(user);
+    const { password, ...userInfo } = user;
+    const salt = bcrypt.genSaltSync(10);
+    const passHash = bcrypt.hashSync(password, salt);
+    const result = await this.model.createUser({ password: passHash, ...userInfo });
     return result as unknown as IUser;
   }
 
