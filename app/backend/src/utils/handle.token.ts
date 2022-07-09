@@ -13,17 +13,12 @@ export default class HandleToken {
     algorithm: 'HS256',
   };
 
-  public generateToken(payload: object): string {
+  public getToken(payload: object): string {
     const token = jwt.sign(
       { data: payload },
       this.secret,
       this.jwtHeadersConfig,
     );
     return token;
-  }
-
-  public getToken(userPayload: object): object {
-    const token = this.generateToken(userPayload);
-    return { token };
   }
 }
