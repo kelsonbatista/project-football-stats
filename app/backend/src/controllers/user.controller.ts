@@ -13,12 +13,17 @@ export default class UserController {
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.service.login(req.body);
-      if (!user) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-          message: 'Invalid user or password',
-        });
+      if (user) {
+        const userInfo = {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+          email: user.email,
+        };
+        const token = this.handleToken.getToken(userInfo);
+        return res.status(StatusCodes.OK).json({ token });
       }
-      return res.status(StatusCodes.OK).json(user);
+      return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
     } catch (err) {
       next(err);
     }
@@ -35,12 +40,13 @@ export default class UserController {
 
   public getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
+      const userData: any = req.query.user;
+      const id = req.params.id || userData.id;
       const user = await this.service.getUserById(id);
       if (!user) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          message: 'User not found',
-        });
+        const error = new Error('User not found');
+        error.name = 'NOT_FOUND';
+        throw error;
       }
       return res.status(StatusCodes.OK).json(user);
     } catch (err) {
@@ -51,16 +57,19 @@ export default class UserController {
   public createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = req.body;
-      const userCheck = await this.service.checkUser(user);
-      if (userCheck) {
-        return res.status(StatusCodes.CONFLICT).json({ message: 'User already exists' });
+      const userExists = await this.service.checkUser(user);
+      if (userExists) {
+        const error = new Error('User already exists');
+        error.name = 'CONFLICT';
+        throw error;
       }
       const result = await this.service.createUser(user);
       const { password: passDB, ...userInfo } = result;
-      const token = this.handleToken.getToken({ userInfo });
-      return res
-        .status(StatusCodes.CREATED)
-        .json({ ...token, message: 'User successfully created' });
+      const token = this.handleToken.getToken(userInfo);
+      // return res
+      //   .status(StatusCodes.CREATED)
+      //   .json({ ...token, message: 'User successfully created' });
+      return res.status(StatusCodes.CREATED).json({ token });
     } catch (err) {
       next(err);
     }
