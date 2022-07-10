@@ -22,7 +22,7 @@ const authToken = async (req: Request, _res: Response, next: NextFunction) => {
     next();
   } catch (err) {
     console.log(`Error: ${err}`);
-    next({ status: StatusCodes.UNAUTHORIZED, message: 'Invalid token' });
+    next({ status: StatusCodes.UNAUTHORIZED, message: 'Token must be a valid token' });
   }
 };
 
