@@ -12,7 +12,7 @@ export default class TeamRepository implements ITeamModel {
   }
 
   public async getTeamById(id: string): Promise<ITeam> {
-    const team = await this.model.findByPk(id);
+    const team = await this.model.findByPk(id).then((result) => result && result.toJSON());
     return team as ITeam;
   }
 
