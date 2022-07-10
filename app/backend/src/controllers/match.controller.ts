@@ -54,8 +54,8 @@ export default class MatchController {
     try {
       const { id } = req.params;
       const matchInfo = req.body;
-      const match = await this.service.editMatch(id, matchInfo);
-      return res.status(StatusCodes.OK).json(match);
+      await this.service.editMatch(id, matchInfo);
+      return res.status(StatusCodes.OK).json({ message: 'Match successfully edited' });
     } catch (err) {
       next(err);
     }
