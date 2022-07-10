@@ -12,7 +12,6 @@ export default class MatchController {
   public getAllMatches = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const filters = req.query;
-      console.log(filters);
       const matches = await this.service.getAllMatches(filters);
       return res.status(StatusCodes.OK).json(matches);
     } catch (err) {
