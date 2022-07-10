@@ -9,9 +9,11 @@ export default class MatchController {
     this.service = service;
   }
 
-  public getAllMatches = async (_req: Request, res: Response, next: NextFunction) => {
+  public getAllMatches = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const matches = await this.service.getAllMatches();
+      const filters = req.query;
+      console.log(filters);
+      const matches = await this.service.getAllMatches(filters);
       return res.status(StatusCodes.OK).json(matches);
     } catch (err) {
       next(err);

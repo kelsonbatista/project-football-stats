@@ -8,7 +8,7 @@ export default interface IMatch {
 }
 
 export interface IMatchService {
-  getAllMatches(): Promise<IMatch[]>;
+  getAllMatches(filters: object): Promise<IMatch[]>;
   getMatchById(id: string): Promise<IMatch>;
   checkMatch(match: IMatch): Promise<IMatch>;
   createMatch(match: IMatch): Promise<IMatch>;
@@ -17,7 +17,7 @@ export interface IMatchService {
 }
 
 export interface IMatchModel {
-  getAllMatches(): Promise<IMatch[]>;
+  getAllMatches(filters: object): Promise<IMatch[]>;
   getMatchById(id: string): Promise<IMatch>;
   checkMatch(match: IMatch): Promise<IMatch>;
   createMatch(match: IMatch): Promise<IMatch>;

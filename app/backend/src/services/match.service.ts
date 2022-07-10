@@ -6,8 +6,8 @@ export default class MatchService implements IMatchService {
     this.model = model;
   }
 
-  public async getAllMatches(): Promise<IMatch[]> {
-    const result = await this.model.getAllMatches();
+  public async getAllMatches(filters: object): Promise<IMatch[]> {
+    const result = await this.model.getAllMatches(filters);
     return result;
   }
 

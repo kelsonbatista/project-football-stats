@@ -11,13 +11,15 @@ export default class MatchRepository implements IMatchModel {
     this.teamModel = teamModel;
   }
 
-  public async getAllMatches(): Promise<IMatch[]> {
-    const result = await this.matchModel.findAll({
-      include: [
-        { model: this.teamModel, attributes: ['teamName'], as: 'teamHome' },
-        { model: this.teamModel, attributes: ['teamName'], as: 'teamAway' },
-      ],
-    });
+  public async getAllMatches(filters: object): Promise<IMatch[]> {
+    const result = await this.matchModel.findAll(
+      { where: { ...filters },
+        include: [
+          { model: this.teamModel, attributes: ['teamName'], as: 'teamHome' },
+          { model: this.teamModel, attributes: ['teamName'], as: 'teamAway' },
+        ],
+      },
+    );
     return result as IMatch[];
   }
 
