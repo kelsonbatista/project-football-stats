@@ -1,5 +1,6 @@
 import * as express from 'express';
 import MatchFactory from '../factory/match.factory';
+import authToken from '../middlewares/auth.token.middleware';
 
 const matchRouter = express.Router();
 const matchFactory = new MatchFactory();
@@ -9,9 +10,9 @@ matchRouter.get('/', matchController.getAllMatches);
 
 matchRouter.get('/:id', matchController.getMatchById);
 
-matchRouter.post('/', matchController.createMatch);
+matchRouter.post('/', authToken, matchController.createMatch);
 
-matchRouter.put('/:id', matchController.editMatch);
+matchRouter.patch('/:id', matchController.editMatch);
 
 matchRouter.patch('/:id/finish', matchController.finishMatch);
 
