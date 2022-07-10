@@ -41,7 +41,8 @@ export default class MatchRepository implements IMatchModel {
   }
 
   public async createMatch(match: IMatch): Promise<IMatch> {
-    const response = await this.matchModel.create(match).then((result) => result.toJSON());
+    const newMatch = { ...match, inProgress: 1 };
+    const response = await this.matchModel.create(newMatch).then((result) => result.toJSON());
     return response as IMatch;
   }
 
