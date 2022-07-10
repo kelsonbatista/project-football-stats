@@ -13,6 +13,8 @@ matchRouter.post('/', matchController.createMatch);
 
 matchRouter.put('/:id', matchController.editMatch);
 
+matchRouter.patch('/:id/finish', matchController.finishMatch);
+
 matchRouter.delete('/:id', matchController.deleteMatch);
 
 export default matchRouter;

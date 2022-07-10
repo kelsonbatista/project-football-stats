@@ -50,6 +50,11 @@ export default class MatchRepository implements IMatchModel {
     return result as unknown as IMatch;
   }
 
+  public async finishMatch(id: string): Promise<IMatch> {
+    const result = await this.matchModel.update({ inProgress: 0 }, { where: { id } });
+    return result as unknown as IMatch;
+  }
+
   public async deleteMatch(id: string): Promise<void> {
     await this.matchModel.destroy({ where: { id } });
   }

@@ -13,6 +13,7 @@ export interface IMatchService {
   checkMatch(match: IMatch): Promise<IMatch>;
   createMatch(match: IMatch): Promise<IMatch>;
   editMatch(id: string, match: IMatch): Promise<IMatch>;
+  finishMatch(id: string): Promise<IMatch>;
   deleteMatch(id: string): Promise<void>;
 }
 
@@ -22,5 +23,6 @@ export interface IMatchModel {
   checkMatch(match: IMatch): Promise<IMatch>;
   createMatch(match: IMatch): Promise<IMatch>;
   editMatch(id: string, match: IMatch): Promise<IMatch>;
+  finishMatch(id: string): Promise<IMatch>;
   deleteMatch(id: string): Promise<void>;
 }

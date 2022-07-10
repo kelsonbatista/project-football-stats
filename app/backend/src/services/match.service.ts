@@ -31,6 +31,11 @@ export default class MatchService implements IMatchService {
     return result as IMatch;
   }
 
+  public async finishMatch(id: string): Promise<IMatch> {
+    const result = await this.model.finishMatch(id);
+    return result as IMatch;
+  }
+
   public async deleteMatch(id: string): Promise<void> {
     await this.model.deleteMatch(id);
   }

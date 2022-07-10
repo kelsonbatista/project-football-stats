@@ -61,6 +61,16 @@ export default class MatchController {
     }
   };
 
+  public finishMatch = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      await this.service.finishMatch(id);
+      return res.status(StatusCodes.OK).json({ message: 'Finished' });
+    } catch (err) {
+      next(err);
+    }
+  };
+
   public deleteMatch = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
