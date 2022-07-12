@@ -17,7 +17,7 @@ export default class MatchRepository implements IMatchModel {
       .filter(([key, value]) => key === 'inProgress' && value === 'true');
     let inProgress: any = inProgressBool && inProgressBool.length > 0 ? 1 : 0;
     if (inProgress === undefined) inProgress = null;
-    console.log({ ...filters }, '<<<<<<<<<<<<<<<  inProgress');
+    // console.log({ ...filters }, '<<<<<<<<<<<<<<<  inProgress');
     const result = await this.matchModel.findAll(
       { where: { ...filters },
         include: [
