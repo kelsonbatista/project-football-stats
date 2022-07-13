@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import IMatch, { IMatchModel } from '../protocols/match.interface';
 import MatchModel from '../database/models/match.model';
 import TeamModel from '../database/models/team.model';
@@ -15,11 +16,12 @@ export default class MatchRepository implements IMatchModel {
     const inProgressKey = Object.keys(filters).find((key) => key === 'inProgress');
     const inProgressBool = inProgressKey && Object.entries(filters)
       .filter(([key, value]) => key === 'inProgress' && value === 'true');
-    let inProgress: any = inProgressBool && inProgressBool.length > 0 ? 1 : 0;
-    if (inProgress === undefined) inProgress = null;
-    // console.log({ ...filters }, '<<<<<<<<<<<<<<<  inProgress');
+    const inProgress: any = inProgressBool && inProgressBool.length > 0 ? 1 : 0;
+    const progress = inProgressKey
+      ? { inProgress }
+      : { [Op.or]: [{ inProgress: 1 }, { inProgress: 0 }] };
     const result = await this.matchModel.findAll(
-      { where: { ...filters },
+      { where: { ...filters, ...progress },
         include: [
           { model: this.teamModel, attributes: ['teamName'], as: 'teamHome' },
           { model: this.teamModel, attributes: ['teamName'], as: 'teamAway' },
