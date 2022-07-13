@@ -12,8 +12,13 @@ export default class LBoardService implements ILBoardService {
     return teamMatches as ITeamMatch[];
   }
 
-  public async getLeaderboard(homeAwayTeam: string): Promise<ILBoard[]> {
-    const teamMatches = await this.model.getLeaderboard(homeAwayTeam);
+  public async getLeaderboard(homeAwayTeam: string, order: boolean): Promise<ILBoard[]> {
+    const teamMatches = await this.model.getLeaderboard(homeAwayTeam, order);
+    return teamMatches as ILBoard[];
+  }
+
+  public async getLeaderboardTotal(): Promise<ILBoard[]> {
+    const teamMatches = await this.model.getLeaderboardTotal();
     return teamMatches as ILBoard[];
   }
 }

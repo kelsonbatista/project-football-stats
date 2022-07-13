@@ -21,10 +21,12 @@ export interface ITeamMatch extends ITeam {
 
 export interface ILBoardService {
   getMatches(homeAwayTeam: string): Promise<ITeamMatch[]>
-  getLeaderboard(team: string): Promise<ILBoard[]>;
+  getLeaderboard(team: string, order: boolean): Promise<ILBoard[]>;
+  getLeaderboardTotal(): Promise<ILBoard[]>
 }
 
 export interface ILBoardModel {
   getMatches(homeAwayTeam: string): Promise<ITeamMatch[]>
-  getLeaderboard(team: string): Promise<ILBoard[]>;
+  getLeaderboard(team: string, order: boolean): Promise<ILBoard[]>;
+  getLeaderboardTotal(): Promise<ILBoard[]>
 }

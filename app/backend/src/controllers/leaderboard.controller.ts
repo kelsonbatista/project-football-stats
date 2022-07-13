@@ -20,7 +20,16 @@ export default class LBoardController {
   public getLeaderboard = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { homeAwayTeam } = req.params;
-      const teamMatches = await this.service.getLeaderboard(homeAwayTeam);
+      const teamMatches = await this.service.getLeaderboard(homeAwayTeam, false);
+      res.status(StatusCodes.OK).json(teamMatches);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public getLeaderboardTotal = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const teamMatches = await this.service.getLeaderboardTotal();
       res.status(StatusCodes.OK).json(teamMatches);
     } catch (err) {
       next(err);

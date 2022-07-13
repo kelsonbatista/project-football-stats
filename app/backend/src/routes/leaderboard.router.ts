@@ -11,4 +11,6 @@ LBoardRouter.get('/matches/:homeAwayTeam', boardController.getMatches);
 
 LBoardRouter.get('/:homeAwayTeam', boardController.getLeaderboard);
 
+LBoardRouter.get('/', boardController.getLeaderboardTotal);
+
 export default LBoardRouter;
