@@ -48,24 +48,37 @@ export default class LBoardRepository implements ILBoardModel {
     return lb as unknown as ILBoard[];
   }
 
+  public getMatchesTotal = async (matchesHome: ILBoard[], matchesAway: ILBoard[]) => {
+    const board = await zip(matchesHome, matchesAway).map(([team1, team2]) => {
+      if (team1 !== undefined && team2 !== undefined) {
+        return {
+          name: team1.name,
+          totalPoints: team1.totalPoints + team2.totalPoints,
+          totalGames: team1.totalGames + team2.totalGames,
+          totalVictories: team1.totalVictories + team2.totalVictories,
+          totalDraws: team1.totalDraws + team2.totalDraws,
+          totalLosses: team1.totalLosses + team2.totalLosses,
+          goalsFavor: team1.goalsFavor + team2.goalsFavor,
+          goalsOwn: team1.goalsOwn + team2.goalsOwn,
+          goalsBalance: team1.goalsBalance + team2.goalsBalance,
+          efficiency: Number((((team1.totalPoints + team2.totalPoints) / 2)
+            / ((((team1.totalGames + team2.totalGames) / 2) * 3) / 100)).toFixed(2)) };
+      }
+      return null;
+    });
+    return board as unknown as ILBoard[];
+  };
+
   public async getLeaderboardTotal(): Promise<ILBoard[]> {
     const matchesHome = await this.getLeaderboard('home', true);
     const matchesAway = await this.getLeaderboard('away', true);
-    const board: any = zip(matchesHome, matchesAway).map(([team1, team2]) => ({
-      name: team1!.name,
-      totalPoints: team1!.totalPoints + team2!.totalPoints,
-      totalGames: team1!.totalGames + team2!.totalGames,
-      totalVictories: team1!.totalVictories + team2!.totalVictories,
-      totalDraws: team1!.totalDraws + team2!.totalDraws,
-      totalLosses: team1!.totalLosses + team2!.totalLosses,
-      goalsFavor: team1!.goalsFavor + team2!.goalsFavor,
-      goalsOwn: team1!.goalsOwn + team2!.goalsOwn,
-      goalsBalance: team1!.goalsBalance + team2!.goalsBalance,
-      efficiency: Number((((team1!.totalPoints + team2!.totalPoints) / 2)
-        / ((((team1!.totalGames + team2!.totalGames) / 2) * 3) / 100)).toFixed(2)),
-    }));
-    board.sort((a: ILBoard, b: ILBoard) => (b.totalPoints - a.totalPoints
-    || b.goalsBalance - a.goalsBalance || b.goalsFavor - a.goalsFavor || b.goalsOwn - a.goalsOwn));
+    const board = await this.getMatchesTotal(matchesHome, matchesAway);
+    board.sort((a: ILBoard, b: ILBoard) => (
+      b.totalPoints - a.totalPoints
+      || b.goalsBalance - a.goalsBalance
+      || b.goalsFavor - a.goalsFavor
+      || b.goalsOwn - a.goalsOwn
+    ));
     return board as unknown as ILBoard[];
   }
 }
