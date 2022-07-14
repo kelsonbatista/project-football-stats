@@ -28,7 +28,7 @@ export default class MatchController {
         error.name = 'NOT_FOUND';
         throw error;
       }
-      return res.status(StatusCodes.OK).json({ match });
+      return res.status(StatusCodes.OK).json({ ...match });
     } catch (err) {
       next(err);
     }
