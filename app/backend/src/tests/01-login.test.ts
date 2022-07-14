@@ -1,11 +1,11 @@
-// import * as sinon from 'sinon';
+import * as sinon from 'sinon';
 import * as chai from 'chai';
 // import * as bcrypt from 'bcryptjs';
 import { before } from 'mocha';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-// import UserModel from '../database/models/user.model';
+import UserModel from '../database/models/user.model';
 import { Response } from 'superagent';
 import HandleToken from '../utils/handle.token';
 
@@ -15,7 +15,7 @@ const { expect } = chai;
 
 describe('1 - Login endpoint tests', () => {
 
-  let chaiHttpResponse: Response;
+  let res: Response;
   
   const stubUser = {
     "id": 2,
@@ -48,49 +48,49 @@ describe('1 - Login endpoint tests', () => {
   });
 
   it('1.1 - Returns status 200 and a token with valid credentials', async () => {
-    const res = await chai.request(app).post('/login').send(validCredentials);
+    res = await chai.request(app).post('/login').send(validCredentials);
     expect(res.status).to.be.eq(200);
     expect(res.body).to.be.an('object');
     expect(res.body).to.have.property('token');
   });
 
   it('1.2 - Returns an error status 400 if has no email property', async () => {
-    const res = await chai.request(app).post('/login').send(noEmailProperty);
+    res = await chai.request(app).post('/login').send(noEmailProperty);
     expect(res.status).to.be.eq(400);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('"email" is required');
   });
 
   it('1.3 - Returns an error status 401 with wrong email credential', async () => {
-    const res = await chai.request(app).post('/login').send(wrongEmailCredentials);
+    res = await chai.request(app).post('/login').send(wrongEmailCredentials);
     expect(res.status).to.be.eq(401);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('Incorrect email or password');
   });
 
   it('1.4 - Returns an error status 400 with invalid email credential', async () => {
-    const res = await chai.request(app).post('/login').send(invalidEmailCredentials);
+    res = await chai.request(app).post('/login').send(invalidEmailCredentials);
     expect(res.status).to.be.eq(400);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('All fields must be filled');
   });
 
   it('1.5 - Returns an error status 400 if has no password property', async () => {
-    const res = await chai.request(app).post('/login').send(noPasswordProperty);
+    res = await chai.request(app).post('/login').send(noPasswordProperty);
     expect(res.status).to.be.eq(400);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('"password" is required');
   });
 
   it('1.6 - Returns an error status 401 with wrong password credential', async () => {
-    const res = await chai.request(app).post('/login').send(wrongPasswordCredentials);
+    res = await chai.request(app).post('/login').send(wrongPasswordCredentials);
     expect(res.status).to.be.eq(401);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('Incorrect email or password');
   });
 
   it('1.7 - Returns an error status 400 with invalid password credential', async () => {
-    const res = await chai.request(app).post('/login').send(invalidPasswordCredentials);
+    res = await chai.request(app).post('/login').send(invalidPasswordCredentials);
     expect(res.status).to.be.eq(400);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('All fields must be filled');
@@ -98,6 +98,8 @@ describe('1 - Login endpoint tests', () => {
 });
 
 describe('2 - Login Validation endpoint tests', () => {
+
+  let res: Response;
   
   const stubUser = {
     "id": 1,
@@ -108,26 +110,26 @@ describe('2 - Login Validation endpoint tests', () => {
   }
 
   const handleToken = new HandleToken();
-  const token = handleToken.getToken(stubUser);
-  const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20ifSwiaWF0IjoxNjU3ODA3MDg3LCJleHAiOjE2NTc4MTA2ODd9.gSAHYWwRByRqv0Vt4ZH2L7P00wqJrRKVchOiQy2122Y'
+  // const token = handleToken.getToken(stubUser);
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkbWluIiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20ifSwiaWF0IjoxNjU3ODI0NTQyLCJleHAiOjE2NTc4MjgxNDJ9.Ir0GCHos92TlJr4leNvMUCuKqGCdAPltYOKj29Fuq5k'
 
   before(async () => {
-    // sinon.stub(UserModel, "findOne").resolves(stubUser as UserModel);
+    sinon.stub(UserModel, "findOne").resolves(stubUser as UserModel);
   });
 
   after(()=>{
-    // (UserModel.findOne as sinon.SinonStub).restore();
+    (UserModel.findOne as sinon.SinonStub).restore();
   })
 
   it('2.1 - Returns status 200 and user information with valid token', async () => {
-    const res = await chai.request(app).post('/login/validate').set({ "Authorization": token });
+    res = await chai.request(app).post('/login/validate').set({ "authorization": token });
     expect(res.status).to.be.eq(200);
     expect(res.body).to.be.an('object');
     expect(res.body).to.have.property('email');
   });
 
   it('2.2 - Returns an error status 401 with invalid token', async () => {
-    const res = await chai.request(app).post('/login/validate').set({ "Authorization": invalidToken });
+    res = await chai.request(app).post('/login/validate').set({ "authorization": token });
     expect(res.status).to.be.eq(401);
     expect(res.body).to.be.an('object');
     expect(res.body.message).to.be.equal('Token must be a valid token');
