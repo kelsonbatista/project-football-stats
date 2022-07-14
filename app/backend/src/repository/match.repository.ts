@@ -32,7 +32,7 @@ export default class MatchRepository implements IMatchModel {
   }
 
   public async getMatchById(id: string): Promise<IMatch> {
-    const match = await this.matchModel.findByPk(id);
+    const match = await this.matchModel.findByPk(id, { raw: true });
     return match as IMatch;
   }
 
