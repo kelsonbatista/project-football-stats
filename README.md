@@ -30,4 +30,4 @@ Commands:
 
 - Go to /app folder
 - Run docker-compose -f docker-compose.dev.yml up -d
-- Access http://localhost:5000
+- Access http://localhost:3000
